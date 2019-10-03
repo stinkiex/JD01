@@ -15,7 +15,7 @@
           <root type="composite">
             <root url="jar://C:/Program Files/Java/jdk1.8.0_221/jre/lib/charsets.jar!/" type="simple" />
             <root url="jar://C:/Program Files/Java/jdk1.8.0_221/jre/lib/deploy.jar!/" type="simple" />
-            <root url="jar://C:/Program Files/Java/jdk1.8.0_221/jre/lib/ext/access-bridge-64.jar!/" type="simple" />
+            <root url="jar://C:/Program Files/Java/jdk1.8.0_221/jre/lib/ext/access-bridge.jar!/" type="simple" />
             <root url="jar://C:/Program Files/Java/jdk1.8.0_221/jre/lib/ext/cldrdata.jar!/" type="simple" />
             <root url="jar://C:/Program Files/Java/jdk1.8.0_221/jre/lib/ext/dnsns.jar!/" type="simple" />
             <root url="jar://C:/Program Files/Java/jdk1.8.0_221/jre/lib/ext/jaccess.jar!/" type="simple" />
