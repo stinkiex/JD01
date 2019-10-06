@@ -1,4 +1,4 @@
-import dto.*;
+﻿import dto.*;
 
 public class Task {
     public static void sdvig() {
@@ -44,7 +44,7 @@ public static void computers() {
     if (c2 instanceof AsusComputer) {
         AsusComputer c3 = (AsusComputer) c2;
         } else{
-        AcerComputer c3 = (AcerComputer) c2;}
+        System.out.println("Ошибка ClassCastException";}
 }
 
 
