@@ -8,9 +8,9 @@ public class Task1
         System.out.print("Задание 1.1:\n");
         String str1 = "Мама мыла раму";
         String str2 = "Мама" + " мыла " + "раму";
-        System.out.println("str1 == str2: " + str1==str2+ "\n");
-        System.out.println("str1 == str2: " + str1.intern()==str2.intern()+ "\n");
-        System.out.println("str1 == str2: " + str1.equals(str2)+ "\n");
+        System.out.println("str1 == str2: " + str1 == str2+ "\n");
+        System.out.println("str1 == str2: " + str1.intern() == str2.intern()+ "\n");
+        System.out.println("str1 equal str2: " + str1.equals(str2)+ "\n");
 
         //Задание 1.2:
         System.out.print("\nЗадание 1.2:\n");
