@@ -14,10 +14,12 @@ public class WarAndPeace {
     public static void warAndPeace (String arr) {
         System.out.println("\n\n\nВойна и мир!!! ");
         String book = Reader.readText(arr);
+
         //System.out.println(book);
         System.out.println("Слово война :"+Finder.regFind("война", book));
         System.out.println("Союз и :"+Finder.regFind("и", book));
         System.out.println("Слово мир :"+Finder.regFind("мир", book));
+        System.out.println("Искомое слово "+arr+ " встречается "+Finder.regFind(arr, book));
 
 
 

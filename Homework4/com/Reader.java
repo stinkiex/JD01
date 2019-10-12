@@ -8,8 +8,8 @@ public class Reader {
     public static String readText(String input) {
         FileInputStream text = null;
         try {
-            //text = new FileInputStream("D:/WarAndPeace.txt");
-            text = new FileInputStream(input);
+            text = new FileInputStream("D:/WarAndPeace.txt");
+            //text = new FileInputStream(input);
         } catch (
                 FileNotFoundException e) {
             e.printStackTrace();
