@@ -1,24 +1,33 @@
 import messenger.*;
 
 import java.util.Date;
+import java.util.Scanner;
 
 public class Messenger {
     /**Мессенджер
-     * 1. Вводить ник:
+     * [1.] Вводить ник:
      *  [1.1] Должен быть только латинскими буквами
      *  [1.2] Должен быть не меньше 5 символов
      *  [1.3] Не должен начинаться с цифры
      *  [1.4] Не должен содержать #,!,\
-     * 2. Сообщения вводятся через консоль
+     * [2.] Сообщения вводятся через консоль
      * [3]. Сообщения хранятся в массиве
-     * [4.] Можно отредактировать своё сообщение если оно не старше минуты
+     * 4. Можно отредактировать своё сообщение если оно не старше минуты
      * [5.] Можно писать отложенные сообщения
     **/
+
+
     public static User getValidUser(){
+        String login, password;
+        Scanner sc = new Scanner(System.in);
         User user = null;
         boolean flag = false;
         do{
-            user = new User ("user1", "password1");
+            System.out.println("Enter your login: ");
+            login = sc.nextLine();
+            System.out.println("Enter your password: ");
+            password = sc.nextLine();
+            user = new User (login, password);
             flag = ValidateUser.checkUser(user);
             if (!flag) {
                 System.out.println("Invalid user");
@@ -29,25 +38,51 @@ public class Messenger {
 
 
     public static void main(String[] args) {
-
-
-
+        System.out.println("ИНСТРУКЦИЯ:\n 1.Для отложенного сообщения в начале сообщения напишите DELAY ");
+        System.out.println("2.Для остановки ввода сообщений напишите EXIT");
 
         User user1 = getValidUser();
-
         User user2 = getValidUser();
         //User user9 = new User("Ашот", "pass");
 
-
         Dialogs dialogs = new Dialogs();
-        dialogs.addMessages(new Message("first",user1, new Date()));
-        dialogs.addMessages(new Message("sec",user2, new Date()));
-        dialogs.addMessages(new Message("third",user1, new Date()));
-        dialogs.addMessages(new Message("fourth",user2, new Date()));
-        dialogs.addDelayMessages(new Message("five (DELAY)",user1, new Date()));
-        dialogs.addDelayMessages(new Message("six (DELAY)",user2, new Date()));
-        dialogs.addMessages(new Message("third",user1, new Date()));
-        dialogs.addMessages(new Message("fourth",user2, new Date()));
+        Scanner sc = new Scanner(System.in);
+        long time=0;
+        long minutes = 0;
+        Date date2 = new Date();
+        for (int i=1; i<3;){
+            if (i==1) System.out.println(user1.getLogin()+" сообщение ");
+        else System.out.println(user2.getLogin()+" сообщение ");
+            String text = new Scanner(System.in).nextLine();
+        if (text.contains("EXIT"))i=3;
+
+        if (text.contains("DELAY")&i==1){
+            System.out.println("Через сколько минут отправить сообщение"); //1 минута = 60_000секунд
+            minutes = sc.nextLong();
+            time = date2.getTime()+(minutes*60000);
+            String regex = "DELAY";
+            text = text.replaceAll(regex,"");
+            dialogs.addDelayMessages(new Message(text, user1, new Date()));
+            i=2;
+        } else if (i==1){
+            dialogs.addMessages(new Message(text, user1, new Date()));
+        i=2;}
+
+
+            if (text.contains("DELAY")&i==2){
+                System.out.println("Через сколько минут отправить сообщение"); //1 минута = 60_000секунд
+                minutes = sc.nextLong();
+                time = date2.getTime()+(minutes*60000);
+                String regex = "DELAY";
+                text = text.replaceAll(regex,"");
+                dialogs.addDelayMessages(new Message(text, user2, new Date()));
+                i=1;
+            } else if (i==2){
+                dialogs.addMessages(new Message(text, user2, new Date()));
+                i=1;} else if (i==3) break;
+
+        }
+
 
 //        for (Message message:dialogs.getMessages()) {
 //            System.out.println(message);

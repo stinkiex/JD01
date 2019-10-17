@@ -3,6 +3,7 @@ package messenger;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Scanner;
 
 public class Dialogs {
     private Message[] messages = new Message[0];
@@ -47,20 +48,23 @@ public class Dialogs {
     }
 
     public void editMessage(Message message){
-        if ((new Date().getTime()-message.getDate().getTime())<=60000){
-            message.setDate(new Date());
-            message.setMessage("Sometext"); //ToDo дописать ввод из консоли
-        } else{
-            System.out.println("Прошло больше 1 минуты");}
+        if (message.getUser().getPassword().equals(new Scanner(System.in).nextLine())) {
+            if ((new Date().getTime() - message.getDate().getTime()) <= 60000) {
+                message.setDate(new Date());
+                message.setMessage(new Scanner(System.in).nextLine());
+            } else {
+                System.out.println("Прошло больше 1 минуты");
+            }
+        }else System.out.println("Access Denied.");
 
     }
 
-    public void history(IHistorySaver saver){
+    public void history(IHistorySaver s){
         Message[]messages = Arrays.copyOf(this.messages, this.messages.length + this.delayMessages.length);
         System.arraycopy(this.delayMessages, 0, messages, this.messages.length, this.delayMessages.length);
         this.messages=messages;
         for (Message message : this.messages) {
-            saver.println(message.toString());
+            s.println(message.toString());
         }
     }
     public void userHistory(User user){
@@ -72,6 +76,7 @@ public class Dialogs {
         }
 
     }
+
 
 
 }

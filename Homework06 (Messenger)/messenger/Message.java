@@ -33,13 +33,20 @@ public class Message {
         this.date = date;
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return "Message{" +
                 "message='" + message + '\'' +
                 ", user=" + user +
                 ", date=" + date +
                 '}';
-    }
+    }*/
+    @Override
+    public String toString() {
+        return "Message{" +
+                "date='" + date + '\'' +
+                ", user=" + user +
+                ", message=" + message +
+                '}';}
 }
 
