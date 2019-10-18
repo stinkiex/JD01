@@ -1,3 +1,4 @@
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import messenger.*;
 
 import java.util.Date;
@@ -39,7 +40,8 @@ public class Messenger {
 
     public static void main(String[] args) {
         System.out.println("ИНСТРУКЦИЯ:\n 1.Для отложенного сообщения в начале сообщения напишите DELAY ");
-        System.out.println("2.Для остановки ввода сообщений напишите EXIT");
+        System.out.println("2.Для остановки ввода сообщений напишите STOP");
+        System.out.println("3.Для редактирования сообщений напишите EDIT");
 
         User user1 = getValidUser();
         User user2 = getValidUser();
@@ -54,7 +56,7 @@ public class Messenger {
             if (i==1) System.out.println(user1.getLogin()+" сообщение ");
         else System.out.println(user2.getLogin()+" сообщение ");
             String text = new Scanner(System.in).nextLine();
-        if (text.contains("EXIT"))i=3;
+        if (text.contains("STOP"))i=3;
 
         if (text.contains("DELAY")&i==1){
             System.out.println("Через сколько минут отправить сообщение"); //1 минута = 60_000секунд
@@ -62,12 +64,11 @@ public class Messenger {
             time = date2.getTime()+(minutes*60000);
             String regex = "DELAY";
             text = text.replaceAll(regex,"");
-            dialogs.addDelayMessages(new Message(text, user1, new Date()));
+            dialogs.addDelayMessages(new Message(text, user1, new Date(time)));
             i=2;
         } else if (i==1){
             dialogs.addMessages(new Message(text, user1, new Date()));
         i=2;}
-
 
             if (text.contains("DELAY")&i==2){
                 System.out.println("Через сколько минут отправить сообщение"); //1 минута = 60_000секунд
@@ -81,7 +82,13 @@ public class Messenger {
                 dialogs.addMessages(new Message(text, user2, new Date()));
                 i=1;} else if (i==3) break;
 
+            //if (text.contains("EDIT")){
+            //    Dialogs.editMessage(dialogs.getMessages());
+            //}
+
         }
+
+
 
 
 //        for (Message message:dialogs.getMessages()) {

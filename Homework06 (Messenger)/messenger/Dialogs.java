@@ -47,7 +47,7 @@ public class Dialogs {
         return delayMessages;
     }
 
-    public void editMessage(Message message){
+    public static void editMessage(Message message){
         if (message.getUser().getPassword().equals(new Scanner(System.in).nextLine())) {
             if ((new Date().getTime() - message.getDate().getTime()) <= 60000) {
                 message.setDate(new Date());
