@@ -48,6 +48,7 @@ public class Dialogs {
     }
 
     public static void editMessage(Message message){
+        System.out.println("Введите свой логин и пароль");
         if (message.getUser().getPassword().equals(new Scanner(System.in).nextLine())) {
             if ((new Date().getTime() - message.getDate().getTime()) <= 60000) {
                 message.setDate(new Date());
@@ -57,6 +58,14 @@ public class Dialogs {
             }
         }else System.out.println("Access Denied.");
 
+    }
+
+    public void setMessages(Message[] messages) {
+        this.messages = messages;
+    }
+
+    public void setDelayMessages(Message[] delayMessages) {
+        this.delayMessages = delayMessages;
     }
 
     public void history(IHistorySaver s){
