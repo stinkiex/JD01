@@ -46,7 +46,7 @@ public class Message {
         return "Message{" +
                 "date='" + date + '\'' +
                 ", user=" + user +
-                ", message=" + message +
-                '}';}
+                ", \nmessage=" + message +
+                '}'+"\n";}
 }
 

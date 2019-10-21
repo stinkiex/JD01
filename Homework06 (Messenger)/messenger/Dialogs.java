@@ -48,7 +48,7 @@ public class Dialogs {
     }
 
     public static void editMessage(Message message){
-        System.out.println("Введите свой логин и пароль");
+        System.out.println("Введите свой логин");
         if (message.getUser().getPassword().equals(new Scanner(System.in).nextLine())) {
             if ((new Date().getTime() - message.getDate().getTime()) <= 60000) {
                 message.setDate(new Date());

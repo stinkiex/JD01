@@ -2,6 +2,7 @@ import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import messenger.*;
 
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Messenger {
@@ -55,14 +56,14 @@ public class Messenger {
         Date date2 = new Date();
         for (int i = 1; i < 3; ) {
             if (i == 1) System.out.println(user1.getLogin() + " сообщение ");
-            else System.out.println(user2.getLogin() + " сообщение ");
+            else {System.out.println(user2.getLogin() + " сообщение ");}
             String text = new Scanner(System.in).nextLine();
             if (text.contains("STOP")) i = 3;
 
-            if (text.contains("DELAY") & i == 1) {
+            if (text.contains("DELAY") && i == 1) {
                 System.out.println("Через сколько минут отправить сообщение"); //1 минута = 60_000секунд
                 minutes = sc.nextLong();
-                time = date2.getTime() + (minutes * 60000);
+                time = (date2.getTime() + (minutes * 60000));
                 String regex = "DELAY";
                 text = text.replaceAll(regex, "");
                 dialogs.addDelayMessages(new Message(text, user1, new Date(time)));
@@ -72,10 +73,10 @@ public class Messenger {
                 i = 2;
             }
 
-            if (text.contains("DELAY") & i == 2) {
+            if (text.contains("DELAY") && i == 2) {
                 System.out.println("Через сколько минут отправить сообщение"); //1 минута = 60_000секунд
                 minutes = sc.nextLong();
-                time = date2.getTime() + (minutes * 60000);
+                time = (date2.getTime() + (minutes * 60000));
                 String regex = "DELAY";
                 text = text.replaceAll(regex, "");
                 dialogs.addDelayMessages(new Message(text, user2, new Date()));
