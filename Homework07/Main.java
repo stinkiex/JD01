@@ -1,3 +1,5 @@
+import com.*;
+
 import java.util.ArrayList;
 
 
@@ -18,7 +20,6 @@ public class Main {
 
     public static void main(String[] args) {
         ArrayList<Phones> list = new ArrayList();
-        int filter1 = 2017;
         Phones phone1 = new Phones("iPhone", "2G", 2004);
         Phones phone2 = new Phones("iPhone", "3G", 2005);
         Phones phone3 = new Phones("Таксофон", "Уличный", 1980);
@@ -49,12 +50,19 @@ public class Main {
             System.out.println(s);
         }
 
-        System.out.println("\nА теперь фильтр:");
-        FilterApplicator.filter(list, filter1);
-        for (Object s:list
-        ) {
-            System.out.println(s);
-        }
+
+        System.out.println("\n");
+        FilterYear filterYear = new FilterYear(2009);
+        FilterYear filterYear2 = new FilterYear(1988);
+        FilterModel filterModel = new FilterModel("3G");
+        FilterVendor filterVendor = new FilterVendor("HTC");
+
+
+        FilterApplicator fa = new FilterApplicator();
+        System.out.println((fa.filter(list, filterYear))+"\n");
+        System.out.println((fa.filter(list, filterYear2))+"\n");
+        System.out.println((fa.filter(list, filterModel))+"\n");
+        System.out.println((fa.filter(list, filterVendor))+"\n");
     }
 
 }

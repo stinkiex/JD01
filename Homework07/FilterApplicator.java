@@ -1,4 +1,6 @@
 import annotation.Version;
+import com.IFilter;
+import com.Phones;
 
 
 import java.util.*;
@@ -15,17 +17,11 @@ import java.util.*;
  *
  */
 @Version(value = "1.2.3")
-public class FilterApplicator<T extends Object> extends Filter {
-    private ArrayList<T> list = new ArrayList<T>();
+public class FilterApplicator<T extends Collection, E extends IFilter> {
 
-    public FilterApplicator(List list, Phones filter) {
-        super(list, filter);
-    }
-
-//todo разобраться с фильтром
-    public static List<?> filter(List<?> list, int filter){
-        Filter.filter(list, filter);
-        return list;
+    public Collection filter(T collection, E param){
+        collection= (T) param.filter(collection);
+        return collection;
     }
 
     public static List<Phones> sort (List<Phones> collection){
