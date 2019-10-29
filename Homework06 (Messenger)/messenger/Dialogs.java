@@ -28,16 +28,14 @@ public class Dialogs {
 
     public void addDelayMessages(Message [] messages){
         if (messages != null && messages.length != 0) {
-            this.delayMessages = Arrays.copyOf(this.delayMessages, this.messages.length + messages.length);
+            this.delayMessages = Arrays.copyOf(this.delayMessages, this.delayMessages.length + messages.length);
             int messagesLength = messages.length;
             for (Message mes : messages) {
-                mes.getDate().setTime(mes.getDate().getTime()+300000);
+                mes.getDate().setTime(mes.getDate().getTime());
                 this.delayMessages[this.delayMessages.length - messagesLength--] = mes;
             }
         }
     }
-
-
 
     public Message[] getMessages() {
         return messages;
@@ -49,7 +47,7 @@ public class Dialogs {
 
     public static void editMessage(Message message){
         System.out.println("Введите свой логин");
-        if (message.getUser().getPassword().equals(new Scanner(System.in).nextLine())) {
+        if (message.getUser().getLogin().equals(new Scanner(System.in).nextLine())) {
             if ((new Date().getTime() - message.getDate().getTime()) <= 60000) {
                 message.setDate(new Date());
                 message.setMessage(new Scanner(System.in).nextLine());
@@ -57,23 +55,14 @@ public class Dialogs {
                 System.out.println("Прошло больше 1 минуты");
             }
         }else System.out.println("Access Denied.");
-
-    }
-
-    public void setMessages(Message[] messages) {
-        this.messages = messages;
-    }
-
-    public void setDelayMessages(Message[] delayMessages) {
-        this.delayMessages = delayMessages;
     }
 
     public void history(IHistorySaver s){
         Message[]messages = Arrays.copyOf(this.messages, this.messages.length + this.delayMessages.length);
         System.arraycopy(this.delayMessages, 0, messages, this.messages.length, this.delayMessages.length);
         this.messages=messages;
-        for (Message message : this.messages) {
-            s.println(message.toString());
+        for (Message m : this.messages) {
+            s.println(m.toString());
         }
     }
     public void userHistory(User user){
@@ -83,7 +72,6 @@ public class Dialogs {
                 System.out.println(message.toString());
             }
         }
-
     }
 
 

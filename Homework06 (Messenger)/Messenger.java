@@ -48,6 +48,7 @@ public class Messenger {
         User user1 = getValidUser();
         User user2 = getValidUser();
         //User user9 = new User("Ашот", "pass");
+        User curUser = user2;
 
         Dialogs dialogs = new Dialogs();
         Scanner sc = new Scanner(System.in);
@@ -55,42 +56,31 @@ public class Messenger {
         long minutes = 0;
         Date date2 = new Date();
         for (int i = 1; i < 3; ) {
-            if (i == 1) System.out.println(user1.getLogin() + " сообщение ");
-            else {System.out.println(user2.getLogin() + " сообщение ");}
-            String text = new Scanner(System.in).nextLine();
-            if (text.contains("STOP")) i = 3;
-
-            if (text.contains("DELAY") && i == 1) {
-                System.out.println("Через сколько минут отправить сообщение"); //1 минута = 60_000секунд
-                minutes = sc.nextLong();
-                time = (date2.getTime() + (minutes * 60000));
-                String regex = "DELAY";
-                text = text.replaceAll(regex, "");
-                dialogs.addDelayMessages(new Message(text, user1, new Date(time)));
-                i = 2;
-            } else if (i == 1) {
-                dialogs.addMessages(new Message(text, user1, new Date()));
-                i = 2;
+            if (curUser.equals(user1)){
+                curUser=user2;
+            }else {
+                curUser=user1;
             }
+            System.out.println(curUser.getLogin() + " сообщение ");
+            String text = new Scanner(System.in).nextLine();
 
-            if (text.contains("DELAY") && i == 2) {
+            if (text.contains("DELAY")) {
                 System.out.println("Через сколько минут отправить сообщение"); //1 минута = 60_000секунд
                 minutes = sc.nextLong();
                 time = (date2.getTime() + (minutes * 60000));
                 String regex = "DELAY";
                 text = text.replaceAll(regex, "");
-                dialogs.addDelayMessages(new Message(text, user2, new Date()));
-                i = 1;
-            } else if (i == 2) {
-                dialogs.addMessages(new Message(text, user2, new Date()));
-                i = 1;
-            } else if (i == 3) break;
+                dialogs.addDelayMessages(new Message(text, curUser, new Date(time)));
+            }else {
+                dialogs.addMessages(new Message(text, curUser, new Date()));
+            }
 
             if (text.contains("EDIT")) {
                 Message edited = dialogs.getMessages()[dialogs.getMessages().length - 1];
                 Dialogs.editMessage(edited);
             }
 
+            if (text.contains("STOP")) break;
         }
 
 
