@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 public class Account {
     private final String id;
-    private String bankAccount;
     private BigDecimal balance;
     private AccountCurrency accountCurrency;
 
@@ -12,17 +11,12 @@ public class Account {
         this.id = id;
     }
 
-    public String getBankAccount() {
-        return bankAccount;
-    }
-
     public AccountCurrency getAccountCurrency() {
         return accountCurrency;
     }
 
-    public Account(String id, String bankAccount, BigDecimal balance, AccountCurrency accountCurrency) {
+    public Account(String id, BigDecimal balance, AccountCurrency accountCurrency) {
         this.id = id;
-        this.bankAccount=bankAccount;
         this.balance = balance;
         this.accountCurrency=accountCurrency;
     }
@@ -50,7 +44,7 @@ public class Account {
     @Override
     public String toString() {
         return "Account{" +
-                "bankAccount='" + bankAccount + '\'' +
+                "id='" + id + '\'' +
                 ", balance=" + balance +
                 ", accountCurrency=" + accountCurrency +
                 '}';

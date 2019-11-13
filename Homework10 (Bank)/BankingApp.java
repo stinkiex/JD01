@@ -25,9 +25,9 @@ public class BankingApp {
 
         List<Account> accounts = person1.getAccounts();
 
-        accounts.add(bank.createAccountForPerson(person1, "BY01AAAA111111111111111111111", new BigDecimal("100000"), BYN));
-        accounts.add(bank.createAccountForPerson(person1, "BY01AAAA2222222222222222222222", new BigDecimal("100000"), BYN));
-        accounts.add(bank2.createAccountForPerson(person2, "BY01AAAA3333333333333333333333", new BigDecimal("100000"), BYN));
+        accounts.add(bank.createAccountForPerson(person1, new Account("BY01AAAA111111111111111111111"), new BigDecimal("10000"), BYN));
+        accounts.add(bank.createAccountForPerson(person1, new Account("BY01AAAA2222222222222222222222"), new BigDecimal("10000"), BYN));
+        accounts.add(bank2.createAccountForPerson(person2, new Account("BY01AAAA3333333333333333333333"), new BigDecimal("100000"), BYN));
 
         Account account1 = accounts.get(0);
         Account account2 = accounts.get(1);

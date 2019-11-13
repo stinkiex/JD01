@@ -9,18 +9,13 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Bank implements IBank{
     private final String name;
     private final String bic;
-    private BigDecimal bankComission = new BigDecimal(0);
-    private Map<Object, ArrayList<Object>> data = new HashMap<Object, ArrayList<Object>>();
-    private BigDecimal comission = new BigDecimal(0);
+    private BigDecimal bankComission;
+    private Map<Person, ArrayList<Account>> data = new HashMap<>();
     private AtomicInteger transferCount = new AtomicInteger(0);
     Lock locker = new ReentrantLock();
 
     public BigDecimal getBankComission() {
         return bankComission;
-    }
-
-    public BigDecimal getComission() {
-        return comission;
     }
 
     public AtomicInteger getTransferCount() {
@@ -41,10 +36,9 @@ public class Bank implements IBank{
         }
     }
 
-    public Account createAccountForPerson(Person p, String bankAcc, BigDecimal startAmount, AccountCurrency val){
-        Account account = new Account(UUID.randomUUID().toString(), bankAcc, startAmount, val);
+    public Account createAccountForPerson(Person p, Account id, BigDecimal startAmount, AccountCurrency val){
+        Account account = new Account(UUID.randomUUID().toString(), startAmount, val);
         addAccount(p, account);
-
         return account;
     }
 
@@ -54,8 +48,14 @@ public class Bank implements IBank{
         } catch (IllegalArgumentException ignored){
             //У пользователя уже есть учетка
         }
-        //TODO проверить что счета с таким номером в банке больше уже нет
-        List<Object> accounts = this.data.get(p);
+        for (List<Account> s:data.values()){
+            for (Account ss:s){
+                if(ss.getId().equals(account.getId())){
+                    System.out.println("Счёт "+ss.getId()+" уже существует");
+                }//Completed проверить что счета с таким номером в банке больше уже нет
+            }
+        }
+        List<Account> accounts = this.data.get(p);
         accounts.add(account);
     }
 
@@ -72,14 +72,19 @@ public class Bank implements IBank{
         }
     }
 
+    public BigDecimal chargeComission(BigDecimal sum){
+        int minSizeComission = 5;
+        BigDecimal comission = sum.multiply(BigDecimal.valueOf(0.01));
+        if (BigDecimal.valueOf(minSizeComission).compareTo(comission)==1) {
+            comission = new BigDecimal(5);
+        }
+        return comission;
+    }
+
     public void transfer(final Account from, final Account to, BigDecimal sum){
         locker.lock();//ToDo Починить Трансфер
-        BigDecimal comission = sum.multiply(BigDecimal.valueOf(0.01));
-        if (BigDecimal.valueOf(5).compareTo(comission)==1){
-            comission=BigDecimal.valueOf(5);
-        }
         if (from.equals(to)) {
-            if (from.getBalance().compareTo(sum) != -1) {
+            if (from.getBalance().compareTo(sum)!=-1) {
                 from.withdraw(sum);
                 to.deposit(sum);
                 transferCount.incrementAndGet();
@@ -87,14 +92,14 @@ public class Bank implements IBank{
                 System.err.println("Недостаточно средств на счёте");
             }
         } else {
-            if (from.getBalance().compareTo(sum.add(comission)) != -1) {
-                from.withdraw(sum.add(comission));
+            if (from.getBalance().compareTo(sum.add(chargeComission(sum))) != -1) {
+                from.withdraw(sum.add(chargeComission(sum)));
                 to.deposit(sum);
-                bankComission=bankComission.add(comission);
+                bankComission = bankComission.add(chargeComission(sum));
                 transferCount.incrementAndGet();
-                comission = BigDecimal.valueOf(0);
+
 //            } else {
-//                System.out.println("Недостаточно средств на счёте");
+//                System.out.println("Недостаточно средств на счёте"); //ToDo Раскоментировать после ремонта Трансфера
             }
         }
         locker.unlock();
@@ -104,7 +109,7 @@ public class Bank implements IBank{
         return bic;
     }
 
-    public Map<Object, ArrayList<Object>> getData() {
+    public Map<Person, ArrayList<Account>> getData() {
         return data;
     }
 
