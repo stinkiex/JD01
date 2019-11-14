@@ -38,6 +38,71 @@ public class Person {
         this.accounts = accounts;
     }
 
+    public String nameGenerate(){
+        List<String> names = new ArrayList<String>(){{
+            add("Аарон");
+            add("Абрам");
+            add("Аваз");
+            add("Августин");
+            add("Авраам");
+            add("Агап");
+            add("Агапит");
+            add("Агат");
+            add("Агафон");
+            add("Адам");
+            add("Адриан");
+            add("Азамат");
+            add("Азат");
+            add("Азиз");
+            add("Айдар");
+            add("Айрат");
+            add("Акакий");
+            add("Аким");
+            add("Алан");
+            add("Александр");
+            add("Алексей");
+            add("Али");
+            add("Алик");
+            add("Алим");
+            add("Алихан");
+            add("Алишер");
+            add("Алмаз");
+            add("Альберт");
+            add("Амир");
+            add("Амирам");
+            add("Анар");
+            add("Анастасий");
+            add("Анатолий");
+            add("Анвар");
+            add("Ангел");
+            add("Андрей");
+            add("Анзор");
+            add("Антон");
+            add("Анфим");
+            add("Арам");
+            add("Аристарх");
+            add("Аркадий");
+            add("Арман");
+            add("Армен");
+            add("Арсен");
+            add("Арсений");
+            add("Арслан");
+            add("Артём");
+            add("Артемий");
+            add("Артур");
+            add("Архип");
+            add("Аскар");
+            add("Асхан");
+            add("Асхат");
+            add("Ахмет");
+            add("Ашот");
+        }};
+        int i = (int) (Math.random()*(names.size()-1));
+        name = names.get(i);
+        return name;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,7 +113,7 @@ public class Person {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId());
     }
 
     @Override

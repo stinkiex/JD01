@@ -16,22 +16,25 @@ import static banking.AccountCurrency.BYN;
 public class BankingApp {
 
     public static void main(String[] args) {
-        Bank bank = new Bank("BankOfAmerica", "BOFAUS3N", new BigDecimal(0));
-        Bank bank2 = new Bank ("Банк ВТБ (Беларусь)", "SLANBY22", new BigDecimal(0));
+        Bank bank = new Bank("BankOfAmerica", "BOFAUS3N");
+        Bank bank2 = new Bank ("Банк ВТБ (Беларусь)", "SLANBY22");
 
         Person person1 = new Person("MP255_____1", "Илья");
         Person person2 = new Person("MP255_____2", "Игорь");
         Person person3 = new Person("MP255_____3", "Света");
+        Person person4 = new Person("MP2554____4", person1.nameGenerate());
 
         List<Account> accounts = person1.getAccounts();
 
-        accounts.add(bank.createAccountForPerson(person1, new Account("BY01AAAA111111111111111111111"), new BigDecimal("10000"), BYN));
-        accounts.add(bank.createAccountForPerson(person1, new Account("BY01AAAA2222222222222222222222"), new BigDecimal("10000"), BYN));
-        accounts.add(bank2.createAccountForPerson(person2, new Account("BY01AAAA3333333333333333333333"), new BigDecimal("100000"), BYN));
+        accounts.add(bank.createAccountForPerson(person1, new BigDecimal(10000), BYN));
+        accounts.add(bank.createAccountForPerson(person1, new BigDecimal(10000), BYN));
+        accounts.add(bank2.createAccountForPerson(person2, new BigDecimal("100000"), BYN));
+        accounts.add(bank2.createAccountForPerson(person3, new BigDecimal("100000"), BYN));
 
         Account account1 = accounts.get(0);
         Account account2 = accounts.get(1);
         Account account3 = accounts.get(2);
+        Account account4 = accounts.get(3);
 
         ExecutorService executor = Executors.newFixedThreadPool(4); //ToDo Запилить Executor
         Lock locker = new ReentrantLock();
@@ -52,13 +55,12 @@ public class BankingApp {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            BigDecimal avg = (account1.getBalance().add(account2.getBalance()).add(bank.getBankComission())).divide(new BigDecimal("2"));
+            BigDecimal avg = (account1.getBalance().add(account2.getBalance()).divide(new BigDecimal("2")));
+            System.out.println("Transfer No.: "+bank.getTransferCount());
             System.out.println("Acc1 " + account1.getBalance());
             System.out.println("Acc2 " + account2.getBalance());
-            System.out.println("Комисися Банка: "+bank.getBankComission());
             System.out.println("AVG " + avg);
-
-            System.err.println(bank+"\n"+bank2);
+            System.err.println(bank+""+bank2);
         }
     }
 

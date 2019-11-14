@@ -2,6 +2,7 @@ package banking;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -9,23 +10,18 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Bank implements IBank{
     private final String name;
     private final String bic;
-    private BigDecimal bankComission;
     private Map<Person, ArrayList<Account>> data = new HashMap<>();
     private AtomicInteger transferCount = new AtomicInteger(0);
     Lock locker = new ReentrantLock();
 
-    public BigDecimal getBankComission() {
-        return bankComission;
-    }
 
     public AtomicInteger getTransferCount() {
         return transferCount;
     }
 
-    public Bank(String name, String bic, BigDecimal bankComission) {
+    public Bank(String name, String bic) {
         this.name = name;
         this.bic=bic;
-        this.bankComission=bankComission;
     }
 
     public void addClient(Person p) throws IllegalArgumentException{
@@ -36,8 +32,8 @@ public class Bank implements IBank{
         }
     }
 
-    public Account createAccountForPerson(Person p, Account id, BigDecimal startAmount, AccountCurrency val){
-        Account account = new Account(UUID.randomUUID().toString(), startAmount, val);
+    public Account createAccountForPerson(Person p, BigDecimal startAmount, AccountCurrency val){
+        Account account = new Account(UUID. randomUUID().toString(), startAmount, val);
         addAccount(p, account);
         return account;
     }
@@ -72,36 +68,27 @@ public class Bank implements IBank{
         }
     }
 
-    public BigDecimal chargeComission(BigDecimal sum){
-        int minSizeComission = 5;
-        BigDecimal comission = sum.multiply(BigDecimal.valueOf(0.01));
-        if (BigDecimal.valueOf(minSizeComission).compareTo(comission)==1) {
-            comission = new BigDecimal(5);
-        }
-        return comission;
-    }
-
-    public void transfer(final Account from, final Account to, BigDecimal sum){
-        locker.lock();//ToDo Починить Трансфер
-        if (from.equals(to)) {
-            if (from.getBalance().compareTo(sum)!=-1) {
-                from.withdraw(sum);
-                to.deposit(sum);
-                transferCount.incrementAndGet();
-            } else {
-                System.err.println("Недостаточно средств на счёте");
+    public void transfer(final Account from, final Account to, BigDecimal sum) {
+                locker.lock();
+                if (checkPerson(from, to)) {
+                    if (from.getBalance().compareTo(sum) != -1) {
+                        from.withdraw(sum);
+                        to.deposit(sum);
+                        transferCount.incrementAndGet();
+                        //System.out.println("Transfer # "+getTransferCount());
+                    } else {
+                        System.err.println("Transfer # "+(getTransferCount().getAndAdd(1))+"Недостаточно средств на счёте");
+                    }
+                } else {
+                    if (from.getBalance().compareTo(sum.add(chargeComission(sum))) != -1) {
+                        from.withdraw(sum.add(chargeComission(sum)));
+                        to.deposit(sum);
+                        transferCount.incrementAndGet();
+                        //System.out.println("Transfer # "+getTransferCount());
+                    }else{
+                System.out.println("Недостаточно средств на счёте");
+                    }
             }
-        } else {
-            if (from.getBalance().compareTo(sum.add(chargeComission(sum))) != -1) {
-                from.withdraw(sum.add(chargeComission(sum)));
-                to.deposit(sum);
-                bankComission = bankComission.add(chargeComission(sum));
-                transferCount.incrementAndGet();
-
-//            } else {
-//                System.out.println("Недостаточно средств на счёте"); //ToDo Раскоментировать после ремонта Трансфера
-            }
-        }
         locker.unlock();
     }
 
@@ -115,7 +102,44 @@ public class Bank implements IBank{
 
     public String getName() {
         return name;
+    }
 
+    public boolean checkCurency(Account from, Account to){
+        boolean flag;
+        if (from.getAccountCurrency()==to.getAccountCurrency()){
+            flag=true;}
+        else {
+            flag=false;
+        }
+        return flag;
+    }
+
+    public boolean checkPerson(Account from, Account to) {
+        boolean flag=false;
+        Person pFrom=null;
+        Person pTo = null;
+        for (Map.Entry<Person, ArrayList<Account>> element : data.entrySet()) {
+            if(element.getValue().contains(from)){
+                pFrom = element.getKey();
+            }
+            if(element.getValue().contains(to)){
+                pTo = element.getKey();
+            }
+        }
+        if(pFrom.equals(pTo)){
+            flag=true;
+        }
+        return flag;
+    }
+
+
+    public BigDecimal chargeComission(BigDecimal sum){
+        int minSizeComission = 5;
+        BigDecimal comission = sum.multiply(BigDecimal.valueOf(0.01));
+        if (BigDecimal.valueOf(minSizeComission).compareTo(comission)==1) {
+            comission = new BigDecimal(5);
+        }
+        return comission;
     }
 
     @Override
