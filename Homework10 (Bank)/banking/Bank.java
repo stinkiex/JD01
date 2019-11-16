@@ -10,6 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Bank implements IBank{
     private final String name;
     private final String bic;
+    private BigDecimal bankComission = new BigDecimal(0);
     private Map<Person, ArrayList<Account>> data = new HashMap<>();
     private AtomicInteger transferCount = new AtomicInteger(0);
     Lock locker = new ReentrantLock();
@@ -68,23 +69,28 @@ public class Bank implements IBank{
         }
     }
 
-    public void transfer(final Account from, final Account to, BigDecimal sum) {
+    public void transfer(final String from, final String to, BigDecimal sum) {
                 locker.lock();
-                if (checkPerson(from, to)) {
-                    if (from.getBalance().compareTo(sum) != -1) {
-                        from.withdraw(sum);
-                        to.deposit(sum);
+                Account accfrom = getAccFromId(from);
+                Account accto = getAccFromId(to);
+                if (checkPerson(accfrom, accto)) {
+                    if (accfrom.getBalance().compareTo(sum) != -1) {
+                        accfrom.withdraw(sum);
+                        accto.deposit(sum);
                         transferCount.incrementAndGet();
                         //System.out.println("Transfer # "+getTransferCount());
+                        //System.out.println("From: "+ from + "to: "+to+ "Сумма: " + sum + " "+accfrom.getAccountCurrency());
                     } else {
                         System.err.println("Transfer # "+(getTransferCount().getAndAdd(1))+"Недостаточно средств на счёте");
                     }
                 } else {
-                    if (from.getBalance().compareTo(sum.add(chargeComission(sum))) != -1) {
-                        from.withdraw(sum.add(chargeComission(sum)));
-                        to.deposit(sum);
+                    if (accfrom.getBalance().compareTo(sum.add(chargeComission(sum))) != -1) {
+                        accfrom.withdraw(sum.add(chargeComission(sum)));
+                        accto.deposit(sum);
                         transferCount.incrementAndGet();
                         //System.out.println("Transfer # "+getTransferCount());
+                        //System.out.println("From: "+ from + " to: " +to+ "Сумма: " +sum+ " " + accfrom.getAccountCurrency() + "\n with comision: "+chargeComission(sum));
+                        bankComission=bankComission.add(chargeComission(sum));
                     }else{
                 System.out.println("Недостаточно средств на счёте");
                     }
@@ -132,6 +138,22 @@ public class Bank implements IBank{
         return flag;
     }
 
+    public Account getAccFromId(String id){
+        Account account=null;
+        for(List<Account> list:data.values()){
+            for(Account find:list){
+                if(find.getId().equals(id)){
+                    account = find;
+                }
+            }
+        }
+        return account;
+    }
+
+
+    public BigDecimal getBankComission() {
+        return bankComission;
+    }
 
     public BigDecimal chargeComission(BigDecimal sum){
         int minSizeComission = 5;
@@ -142,11 +164,29 @@ public class Bank implements IBank{
         return comission;
     }
 
+    public int clientsInBank(){
+        int result = 0;
+        for (List <Account> accounts:data.values()){
+            for(Account account:accounts){
+                result++;
+            }
+
+        }
+        return result;
+    }
+
+    public BigDecimal getMoneyInBank(Bank bank){
+        BigDecimal money = new BigDecimal(666);
+//        for (Map.Entry<Person, ArrayList<Account>> element : data.entrySet()) {
+//            if (element.getValue().contains(bank)) {
+//                money = money.add()
+//            }
+//        }
+        return money;
+    }
+
     @Override
     public String toString() {
-        return "БАНК :" + name + '\'' +
-                ", БИК:'" + bic + '\'' +
-                ", data=" + data.size() +
-                '}'+"\n";
+        return "БАНК: "+ name + ", БИК: " + bic + ", Кол-во счетов: " + data.size() + ", Кол-во клиентов: " + clientsInBank() + "\n";
     }
 }
