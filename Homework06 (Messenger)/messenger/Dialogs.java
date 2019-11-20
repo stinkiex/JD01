@@ -1,11 +1,12 @@
 package messenger;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
 
-public class Dialogs {
+public class Dialogs implements Serializable {
     private Message[] messages = new Message[0];
     private Message[] delayMessages = new Message[0];
 
@@ -73,7 +74,4 @@ public class Dialogs {
             }
         }
     }
-
-
-
 }

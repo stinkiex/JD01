@@ -1,6 +1,8 @@
 import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import messenger.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -49,12 +51,16 @@ public class Messenger {
         User user2 = getValidUser();
         //User user9 = new User("Ашот", "pass");
         User curUser = user2;
-
         Dialogs dialogs = new Dialogs();
         Scanner sc = new Scanner(System.in);
         long time = 0;
         long minutes = 0;
         Date date2 = new Date();
+        File file = new File("History.txt");
+        FileSaver fs = new FileSaver(file);
+
+        fs.readFile(file);
+
         for (int i = 1; i < 3; ) {
             if (curUser.equals(user1)){
                 curUser=user2;
@@ -91,5 +97,10 @@ public class Messenger {
         dialogs.history(new ConsoleSaver(System.out));
         dialogs.history(new FileSaver(null));
         dialogs.userHistory(user1);
+        try {
+            fs.saveFile(dialogs);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

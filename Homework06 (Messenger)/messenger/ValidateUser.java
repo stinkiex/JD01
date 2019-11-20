@@ -17,7 +17,13 @@ public class ValidateUser {
     }
 
     public static boolean checkPassword(User password){
-        boolean flag=true;
+        boolean flag;
+        Pattern patUser = Pattern.compile("^([a-zA-Z0-9]{8,12})$");
+        Matcher matUser = patUser.matcher(password.getPassword());
+        if (matUser.find()){
+            flag = true;
+        } else
+            flag = false;
         return flag;
     }
 }
