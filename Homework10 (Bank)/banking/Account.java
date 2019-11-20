@@ -1,8 +1,9 @@
 package banking;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Account {
+public class Account implements Serializable {
     private final String id;
     private BigDecimal balance;
     private AccountCurrency accountCurrency;

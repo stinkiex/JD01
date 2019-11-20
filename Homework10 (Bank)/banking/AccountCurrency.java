@@ -1,6 +1,8 @@
 package banking;
 
-public enum AccountCurrency {
+import java.io.Serializable;
+
+public enum AccountCurrency implements Serializable {
     USD(840, "USD"),
     EUR(978, "EUR"),
     BYN(933, "BYN"),

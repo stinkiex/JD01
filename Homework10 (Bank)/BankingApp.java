@@ -40,22 +40,22 @@ public class BankingApp {
         ExecutorService executor = Executors.newFixedThreadPool(3); //ToDo Запилить Executor
         Lock locker = new ReentrantLock();
 
-//        Thread t1 = new Thread(new TransferTread(account1, account2, bank));
-//        Thread t2 = new Thread(new TransferTread(account1, account2, bank));
-//        Thread t3 = new Thread(new TransferTread(account1, account2, bank));
-//        Thread t4 = new Thread(new TransferTread(account1, account2, bank));
-//        Thread t5 = new Thread(new TransferTread(account1, account2, bank));
-//
-//        t1.start();
-//        t2.start();
-//        t3.start();
-//        t4.start();
-//        t5.start();
+        Thread t1 = new Thread(new TransferTread(account1, account2, bank));
+        Thread t2 = new Thread(new TransferTread(account1, account2, bank));
+        Thread t3 = new Thread(new TransferTread(account1, account2, bank));
+        Thread t4 = new Thread(new TransferTread(account1, account2, bank));
+        Thread t5 = new Thread(new TransferTread(account1, account2, bank));
 
-        executor.execute(new TransferTread(account1, account2, bank));
-        executor.execute(new TransferTread(account1, account2, bank));
-        executor.execute(new TransferTread(account1, account2, bank));
-        executor.execute(new TransferTread(account1, account2, bank));
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+        t5.start();
+
+//        executor.execute(new TransferTread(account1, account2, bank));
+//        executor.execute(new TransferTread(account1, account2, bank));
+//        executor.execute(new TransferTread(account1, account2, bank));
+//        executor.execute(new TransferTread(account1, account2, bank));
 
         while (true){
             try {
